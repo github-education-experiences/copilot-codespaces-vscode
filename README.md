@@ -62,6 +62,7 @@ GitHub Copilot can help you code by offering autocomplete-style suggestions. You
   Add a link to get support, GitHub status page, code of conduct, license link.
 -->
 
+
 ---
 
 Get help: [Post in our discussion board](https://github.com/orgs/skills/discussions/categories/code-with-copilot) &bull; [Review the GitHub status page](https://www.githubstatus.com/)
