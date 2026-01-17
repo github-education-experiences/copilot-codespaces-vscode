@@ -1,7 +1,5 @@
-import { ObjectId } from 'mongodb';
-
 export interface ProposalResponse {
-  _id?: ObjectId;
+  _id?: string;
   name: string;
   response: 'YES' | 'NO';
   message?: string;
@@ -11,7 +9,7 @@ export interface ProposalResponse {
 }
 
 export interface VisitLog {
-  _id?: ObjectId;
+  _id?: string;
   timestamp: Date;
   page: string;
   userAgent?: string;

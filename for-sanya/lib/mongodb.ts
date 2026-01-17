@@ -1,28 +1,34 @@
-import { MongoClient } from 'mongodb';
+// MongoDB connection disabled - using frontend/backend only for now
+// To re-enable: set MONGODB_URI environment variable and uncomment MongoDB imports
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Please add your Mongo URI to .env.local');
-}
+// Mock client for development without MongoDB
+const createMockClientPromise = () => {
+  return Promise.resolve({
+    db: () => ({
+      collection: () => ({
+        find: () => ({
+          sort: () => ({
+            toArray: async () => []
+          })
+        }),
+        countDocuments: async () => 0,
+        distinct: async () => [],
+        aggregate: () => [],
+        insertOne: async () => ({ insertedId: Date.now() })
+      })
+    })
+  } as any);
+};
 
-const uri = process.env.MONGODB_URI;
-const options = {};
+let clientPromise: Promise<any>;
 
-let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
-
-declare global {
-  var _mongoClientPromise: Promise<MongoClient> | undefined;
-}
-
-if (process.env.NODE_ENV === 'development') {
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(uri, options);
-    global._mongoClientPromise = client.connect();
-  }
-  clientPromise = global._mongoClientPromise;
+if (process.env.MONGODB_URI) {
+  // MongoDB support could be re-enabled here if needed
+  // For now, we're using frontend/backend only
+  clientPromise = createMockClientPromise();
 } else {
-  client = new MongoClient(uri, options);
-  clientPromise = client.connect();
+  // Use mock client when no MongoDB connection
+  clientPromise = createMockClientPromise();
 }
 
 export default clientPromise;

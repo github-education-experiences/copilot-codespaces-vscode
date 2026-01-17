@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import clientPromise from '@/lib/mongodb';
-import { ProposalResponse } from '@/lib/types';
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,52 +12,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const client = await clientPromise;
-    const db = client.db('sanya-proposal');
-    
-    const proposalResponse: ProposalResponse = {
-      name: 'Sanya Tripathi',
-      response,
-      message: message || '',
-      timestamp: new Date(),
-      userAgent: request.headers.get('user-agent') || undefined,
-      ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || undefined,
-    };
-
-    const result = await db.collection('responses').insertOne(proposalResponse);
+    // Log the response (without database for now)
+    console.log(`Proposal response: ${response}`, message ? `Message: ${message}` : '');
 
     return NextResponse.json({
       success: true,
-      id: result.insertedId,
+      id: Date.now().toString(),
+      message: 'Response recorded successfully!'
     });
   } catch (error) {
-    console.error('Error saving response:', error);
+    console.error('Error processing response:', error);
     return NextResponse.json(
-      { error: 'Failed to save response' },
+      { error: 'Failed to process response' },
       { status: 500 }
     );
   }
 }
 
 export async function GET() {
-  try {
-    const client = await clientPromise;
-    const db = client.db('sanya-proposal');
-    
-    const responses = await db.collection('responses')
-      .find({})
-      .sort({ timestamp: -1 })
-      .limit(1)
-      .toArray();
-
-    return NextResponse.json({
-      response: responses[0] || null,
-    });
-  } catch (error) {
-    console.error('Error fetching response:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch response' },
-      { status: 500 }
-    );
-  }
+  // Return mock data
+  return NextResponse.json({
+    response: null,
+    message: 'Frontend/Backend mode (no database)'
+  });
 }
