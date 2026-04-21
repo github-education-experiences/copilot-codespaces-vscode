@@ -27,6 +27,8 @@ jobs:
   get_current_step:
     name: Check current step number
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4.2.1
@@ -38,6 +40,8 @@ jobs:
   on_add_devcontainer:
     name: On Add Devcontainer
     needs: get_current_step
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     # We will only run this action when:
     # 1. This repository isn't the template repository.
