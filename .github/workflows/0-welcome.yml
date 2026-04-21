@@ -21,9 +21,11 @@ jobs:
   get_current_step:
     name: Check current step number
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.1
       - id: get_step
         run: echo "current_step=$(cat ./.github/steps/-step.txt)" >> $GITHUB_OUTPUT
     outputs:
@@ -32,6 +34,8 @@ jobs:
   on_start:
     name: On start
     needs: get_current_step
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     # We will only run this action when:
     # 1. This repository isn't the template repository.
@@ -45,7 +49,7 @@ jobs:
     steps:
       # We'll need to check out the repository so that we can edit the README.
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.1
         with:
           fetch-depth: 0 # Let's get all the branches.
 
